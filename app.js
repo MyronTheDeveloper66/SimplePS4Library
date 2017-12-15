@@ -6,12 +6,14 @@ const methodOverride = require('method-override');
 
 const app = express();
 
-// Routes
-const router = require('./routes/index');
-const games = require('./routes/games');
+// Map global promise - get rid of warning
+mongoose.Promise = global.Promise;
 
-app.use('/', router);
-app.use('/games', games);
+// Connect to mLab
+mongoose.connect('mongodb://ChillDudeLegend:78mc19@ds135966.mlab.com:35966/gamelibrary', 
+{ useMongoClient: true })
+    .then(()=> console.log('Connected to database...'))
+    .catch(err => console.error(err));
 
 // Handlebars Middleware
 app.engine('handlebars', ehb({
@@ -25,6 +27,13 @@ app.use(bodyParser.json());
 
 // Method Override Middleware
 app.use(methodOverride('_method'));
+
+// Routes
+const router = require('./routes/index');
+const games = require('./routes/games');
+
+app.use('/', router);
+app.use('/games', games);
 
 const port = 5000;
 app.listen(port, () => {
