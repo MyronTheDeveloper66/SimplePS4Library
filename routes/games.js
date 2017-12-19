@@ -20,6 +20,17 @@ router.get('/add', (req, res, next) => {
     res.render('./games/add');
 });
 
+router.get('/edit/:id', (req, res, next) => {
+    Game.findOne({
+        _id: req.params.id
+    })
+    .then(game => {
+        res.render('./games/edit', {
+            game: game
+        })
+    })
+});
+
 router.post('/', (req, res, next) => {
     const newGame = {
         title: req.body.title,
@@ -32,6 +43,33 @@ router.post('/', (req, res, next) => {
         .then(game => {
             res.redirect('./games');
         });
+});
+
+router.put('/:id', (req, res, next) => {
+    Game.findOne({
+        _id: req.params.id
+    })
+        .then(game => {
+            // new values
+            game.title = req.body.title,
+            game.year = req.body.year,
+            game.image = req.body.image,
+            game.genre = req.body.genre
+        
+            game.save()
+                .then(game => {
+                    res.redirect('/games');
+            })
+        })
+});
+
+router.delete('/:id', (req, res, next) => {
+    Game.remove({
+        _id: req.params.id
+    })
+    .then(() => {
+        res.redirect('/games')
+    })
 });
 
 module.exports = router;

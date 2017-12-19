@@ -1,1 +1,21 @@
-<h1>Games</h1>
+<h1 class="mb-4 text-center">Games</h1>
+
+<div class="row">
+    {{#each games}}
+        <div class="card card-body mb-2 text-center col-md-4">
+            <div class="game-info mb-1">
+                <h4>{{title}}</h4>
+                <p>Year: {{year}}</p>
+                <p>Genre: {{genre}}</p>
+            </div>
+            <img src="{{image}}" alt="Game Image" class="w-100 mx-auto">
+            <a href="/games/edit/{{id}}" class="btn btn-dark btn-block mt-2 mb-2">Edit</a>
+            <form method="POST" action="/games/{{id}}/?_method=DELETE">
+                <input type="hidden" name="_method" value="DELETE">
+                <input type="submit" class="btn btn-danger btn-block" value="Delete">
+            </form>
+        </div>
+    {{else}}
+    <p>No games listed</p>
+    {{/each}}
+</div>
